@@ -1,0 +1,26 @@
+# OS / Editor
+.DS_Store
+.vscode/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.python-version
+
+# Test / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Env / Local data
+.env
+*.db
+*.sqlite*
+
+# Python virtualenv anywhere
+venv/
+**/venv/
