@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -41,15 +41,19 @@ def get_articles(db: Session = Depends(get_db)):
 def seed_articles(db: Session = Depends(get_db)):
     """サンプルデータを投入"""
     sample_articles = [
-        Article(title="はじめての記事", content="これは最初の記事の内容です。", user="yamada"),
-        Article(title="FastAPIについて", content="FastAPIは高速なPython Webフレームワークです。", user="tanaka"),
-        Article(title="SQLAlchemyの使い方", content="SQLAlchemyはPythonのORMライブラリです。", user="sato"),
+        Article(id=1, title="はじめての記事", content="これは最初の記事の内容です。", user="yamada"),
+        Article(id=2, title="FastAPIについて", content="FastAPIは高速なPython Webフレームワークです。", user="tanaka"),
+        Article(id=3, title="SQLAlchemyの使い方", content="SQLAlchemyはPythonのORMライブラリです。", user="sato"),
     ]
     db.add_all(sample_articles)
     db.commit()
     return {"message": "サンプルデータを投入しました"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/articles/{article_id}", response_model=ArticleResponse)
+def get_article(article_id: int, db: Session = Depends(get_db)):
+    """記事詳細を取得"""
+    article = db.query(Article).filter(Article.id == article_id).first()
+    if article is None:
+        raise HTTPException(status_code=404, detail="Article not found")
+    return article

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export default function Home() {
   const [articles, setArticles] = useState([])
@@ -47,14 +48,16 @@ export default function Home() {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {articles.map((article) => (
             <li key={article.id} style={cardStyle}>
-              <h2 style={{ margin: '0 0 10px 0' }}>{article.title}</h2>
-              <p style={{ color: '#666', margin: '0 0 10px 0' }}>{article.content}</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-                <small style={{ color: '#999' }}>
-                  作成日: {new Date(article.created_at).toLocaleDateString('ja-JP')}
-                </small>
-                <small style={{ color: '#666' }}>作成者: {article.user}</small>
-              </div>
+              <Link href={`/articles/${article.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h2 style={{ margin: '0 0 10px 0' }}>{article.title}</h2>
+                <p style={{ color: '#666', margin: '0 0 10px 0' }}>{article.content}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+                  <small style={{ color: '#999' }}>
+                    作成日: {new Date(article.created_at).toLocaleDateString('ja-JP')}
+                  </small>
+                  <small style={{ color: '#666' }}>作成者: {article.user}</small>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
