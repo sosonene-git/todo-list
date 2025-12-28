@@ -4,12 +4,28 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from .database import engine, get_db
+from .database import engine, get_db, SessionLocal
 from .models import Base, Article
 from .schemas import ArticleResponse
 
 # テーブル作成
 Base.metadata.create_all(bind=engine)
+
+def seed_db():
+    db = SessionLocal()
+    try:
+        if db.query(Article).count() == 0:
+            sample_articles = [
+                Article(title="はじめての記事", content="これは最初の記事の内容です。", user="yamada"),
+                Article(title="FastAPIについて", content="FastAPIは高速なPython Webフレームワークです。", user="tanaka"),
+                Article(title="SQLAlchemyの使い方", content="SQLAlchemyはPythonのORMライブラリです。", user="sato"),
+            ]
+            db.add_all(sample_articles)
+            db.commit()
+    finally:
+        db.close()
+
+seed_db()
 
 app = FastAPI()
 

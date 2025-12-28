@@ -7,6 +7,10 @@ class ArticleBase(BaseModel):
     content: str
 
 
+class ArticleCreate(ArticleBase):
+    pass
+
+
 class ArticleResponse(ArticleBase):
     id: int
     user: str
